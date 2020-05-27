@@ -19,12 +19,22 @@ export class BedsPage implements OnInit, OnDestroy {
 	constructor(
 		private bedService: BedService
 	) { }
-	
+
+	ngOnInit(): void {
+		
+	}
+
 	ngOnDestroy(): void {
+		
+	}
+	
+	ionViewDidLeave(): void {
+		console.log("destroying beds");
 		this.bedPoller && this.bedPoller.unsubscribe();
 	}
 
-	ngOnInit() {
+	ionViewDidEnter() {
+		console.log("starting beds poll");
 		this.bedPoller = timer(0, this.POLL_MS)
 		.pipe(
 			switchMap(() => this.bedService.getBeds()),
@@ -34,7 +44,4 @@ export class BedsPage implements OnInit, OnDestroy {
 		)
 		.subscribe();
 	}
-
-
-
 }

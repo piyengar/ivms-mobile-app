@@ -1,0 +1,46 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-title>Bed Details</ion-title>
+		<ion-buttons slot="start">
+			<ion-back-button defaultHref="/beds"></ion-back-button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-card *ngIf="bed">
+		<ion-card-header>
+			<ion-card-subtitle>{{bed.name}}</ion-card-subtitle>
+			<ion-card-title>{{bed.age}} Yrs, {{bed.sex}}</ion-card-title>
+		</ion-card-header>
+		<ion-card-content>
+			<ion-grid>
+				<ion-row class="table-header">
+					<ion-col>Metric</ion-col>
+					<ion-col>Measured</ion-col>
+					<ion-col>Threshold</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col class="table-header">BP</ion-col>
+					<ion-col></ion-col>
+					<ion-col></ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col class="table-header">Pulse</ion-col>
+					<ion-col></ion-col>
+					<ion-col></ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col class="table-header">RR</ion-col>
+					<ion-col></ion-col>
+					<ion-col></ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col class="table-header">QT</ion-col>
+					<ion-col></ion-col>
+					<ion-col></ion-col>
+				</ion-row>
+			</ion-grid>
+		</ion-card-content>
+	</ion-card>
+</ion-content>
