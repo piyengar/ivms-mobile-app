@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BedService } from '../bed.service';
 import { Bed } from '../models/bed';
-import { timer, Subscription } from 'rxjs';
-import { switchMap, map, tap } from 'rxjs/operators';
+import { timer, Subscription, of } from 'rxjs';
+import { switchMap, map, tap, catchError } from 'rxjs/operators';
 
 
 @Component({
@@ -39,7 +39,14 @@ export class BedsPage implements OnInit, OnDestroy {
 		.pipe(
 			switchMap(() => this.bedService.getBeds()),
 			tap(beds => {
+				beds.forEach(bed => {
+					bed.status = Math.floor(Math.random() * 3);
+				})
 				this.beds = beds;
+			}),
+			catchError(err => {
+				console.log(err);
+				return of(null);
 			})
 		)
 		.subscribe();

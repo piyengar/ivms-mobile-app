@@ -121,7 +121,7 @@ export class BedPage implements OnInit {
 							labelString: 'Time'
 						},
 						ticks: {
-							stepSize: this.MAX_SPO2_LEN / 10
+							// stepSize: this.MAX_SPO2_LEN / 10
 						}
 					}],
 					yAxes: [{
@@ -133,7 +133,10 @@ export class BedPage implements OnInit {
 						ticks: {
 							suggestedMax: 100,
 							suggestedMin: 0,
-							mirror: true
+							stepSize: 20
+						},
+						gridLines : {
+							tickMarkLength: 3
 						}
 					}]
 				}

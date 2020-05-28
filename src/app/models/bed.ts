@@ -17,4 +17,5 @@ export interface Bed {
 	bpAvg?: number;
 	spO2Current?: number;
 	spO2Avg?: number;
+	status?: number;
 }

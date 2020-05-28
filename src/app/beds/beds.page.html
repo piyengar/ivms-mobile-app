@@ -7,9 +7,11 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let bed of beds" [routerLink]="['/beds', bed.id]">
-        <div>
-          {{bed.id}}
+      <ion-col *ngFor="let bed of beds" [routerLink]="['/beds', bed.id]" style="padding: 2px;" size="3" size-md="2">
+        <div class="bed-tile" [ngClass]="{'bed-ok' : bed.status == 0, 'bed-warning' : bed.status == 1, 'bed-danger' : bed.status == 2}">
+			<div class="bed-tile-content">
+				<span class="bed-tile-number">{{bed.id}}</span>
+			</div>
         </div>
       </ion-col>
     </ion-row>
