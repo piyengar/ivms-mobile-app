@@ -14,7 +14,7 @@ export class BedsPage implements OnInit, OnDestroy {
 
 	beds: Bed[];
 	private readonly POLL_MS = 5000;
-	bedPoller: Subscription;
+	private bedPoller: Subscription;
 
 	constructor(
 		private bedService: BedService

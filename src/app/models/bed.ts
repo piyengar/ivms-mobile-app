@@ -1,5 +1,5 @@
 export interface Bed {
-	id: number;
+	id?: number;
 	name?: string;
 	age?: number;
 	sex?: string;

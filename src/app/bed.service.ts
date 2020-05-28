@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, timer } from 'rxjs';
 import { webSocket } from "rxjs/webSocket";
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Bed } from './models/bed';
 import { MedicData } from './models/medic-data';
 import { MedicDataRealtime } from './models/medic-data-realtime';
+import { map } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root'
@@ -51,13 +52,30 @@ export class BedService {
 		// return this.http.get<Bed>(`${this.apiUrl}/${bedId}/medicData`);
 	}
 
-	getRealtimeData(bedId: string): Observable<MedicDataRealtime> {
+	getRealtimeData(bedId: number): Observable<MedicDataRealtime> {
 		let url = `${this.apiUrl}/${bedId}/medicDataRealtime`.replace(/^http/, 'ws');
-		return webSocket<MedicDataRealtime>({
-			url: url,
-			deserializer: (e => {
-				return e.data;
+		let oldSpo2 = 90;
+		const delta = 2;
+		return timer(0, 500)
+		.pipe(
+			map(n => {
+				let data: MedicDataRealtime = {
+					spo2: []
+				}
+				for (let i = 0; i < 10; i++) {
+					let hi = Math.min(oldSpo2 + delta, 100);
+					let lo = Math.max(oldSpo2 - delta, 0);
+					oldSpo2 = +(lo + (hi - lo) * Math.random()).toFixed(2);
+					data.spo2[i] = oldSpo2;
+				}
+				return data;
 			})
-		});
+		);
+		// return webSocket<MedicDataRealtime>({
+		// 	url: url,
+		// 	deserializer: (e => {
+		// 		return e.data;
+		// 	})
+		// });
 	}
 }

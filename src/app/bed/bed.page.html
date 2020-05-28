@@ -22,25 +22,41 @@
 				</ion-row>
 				<ion-row>
 					<ion-col class="table-header">BP</ion-col>
-					<ion-col></ion-col>
-					<ion-col></ion-col>
+					<ion-col>{{bed.bpCurrent}}</ion-col>
+					<ion-col>{{bed.bpAvg}}</ion-col>
 				</ion-row>
 				<ion-row>
 					<ion-col class="table-header">Pulse</ion-col>
-					<ion-col></ion-col>
-					<ion-col></ion-col>
+					<ion-col>{{bed.bpmCurrent}}</ion-col>
+					<ion-col>{{bed.bpmCurrent}}</ion-col>
 				</ion-row>
 				<ion-row>
 					<ion-col class="table-header">RR</ion-col>
-					<ion-col></ion-col>
-					<ion-col></ion-col>
+					<ion-col>{{bed.bpCurrent}}</ion-col>
+					<ion-col>{{bed.bpCurrent}}</ion-col>
 				</ion-row>
 				<ion-row>
 					<ion-col class="table-header">QT</ion-col>
-					<ion-col></ion-col>
-					<ion-col></ion-col>
+					<ion-col>{{bed.tempCurrent}}</ion-col>
+					<ion-col>{{bed.tempAvg}}</ion-col>
 				</ion-row>
 			</ion-grid>
+		</ion-card-content>
+	</ion-card>
+	<ion-card>
+		<ion-card-header>
+			<ion-card-title>SpO2 <span class="ion-float-end">Avg: {{bed?.spO2Avg}}</span></ion-card-title>
+		</ion-card-header>
+		<ion-card-content>
+			<canvas #spo2Canvas></canvas>
+		</ion-card-content>
+	</ion-card>
+	<ion-card>
+		<ion-card-header>
+			<ion-card-title>ECG <span class="ion-float-end">Avg: NA</span></ion-card-title>
+		</ion-card-header>
+		<ion-card-content>
+			Graph
 		</ion-card-content>
 	</ion-card>
 </ion-content>
