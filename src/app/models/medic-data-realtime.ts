@@ -1,4 +1,4 @@
 export interface MedicDataRealtime {
-	spo2?: number[];
+	ppg?: number[];
 	ecg?: number[];
 }

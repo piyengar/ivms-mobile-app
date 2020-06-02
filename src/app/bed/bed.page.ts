@@ -67,8 +67,8 @@ export class BedPage implements OnInit {
 		this.bedRealtimeDataSub = this.bedService.getRealtimeData(this.bedId)
 			.pipe(
 				tap(data => {
-					// console.log('new data', data.spo2);
-					this.addSpO2Data(data.spo2);
+					console.log('new data', data.ppg);
+					this.addSpO2Data(data.ppg);
 				})
 			)
 			.subscribe();

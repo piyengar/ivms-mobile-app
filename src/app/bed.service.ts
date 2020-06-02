@@ -53,29 +53,31 @@ export class BedService {
 	}
 
 	getRealtimeData(bedId: number): Observable<MedicDataRealtime> {
-		let url = `${this.apiUrl}/${bedId}/medicDataRealtime`.replace(/^http/, 'ws');
-		let oldSpo2 = 90;
-		const delta = 2;
-		return timer(0, 500)
-		.pipe(
-			map(n => {
-				let data: MedicDataRealtime = {
-					spo2: []
-				}
-				for (let i = 0; i < 10; i++) {
-					let hi = Math.min(oldSpo2 + delta, 100);
-					let lo = Math.max(oldSpo2 - delta, 0);
-					oldSpo2 = +(lo + (hi - lo) * Math.random()).toFixed(2);
-					data.spo2[i] = oldSpo2;
-				}
+		let url = `${this.apiUrl}/${bedId}/realtime`.replace(/^http/, 'ws');
+		// let oldSpo2 = 90;
+		// const delta = 2;
+		// return timer(0, 500)
+		// .pipe(
+		// 	map(n => {
+		// 		let data: MedicDataRealtime = {
+		// 			spo2: []
+		// 		}
+		// 		for (let i = 0; i < 10; i++) {
+		// 			let hi = Math.min(oldSpo2 + delta, 100);
+		// 			let lo = Math.max(oldSpo2 - delta, 0);
+		// 			oldSpo2 = +(lo + (hi - lo) * Math.random()).toFixed(2);
+		// 			data.spo2[i] = oldSpo2;
+		// 		}
+		// 		return data;
+		// 	})
+		// );
+		return webSocket<MedicDataRealtime>({
+			url: url,
+		}).pipe(
+			map(data => {
+				console.log('ws recd data', data);
 				return data;
 			})
 		);
-		// return webSocket<MedicDataRealtime>({
-		// 	url: url,
-		// 	deserializer: (e => {
-		// 		return e.data;
-		// 	})
-		// });
 	}
 }

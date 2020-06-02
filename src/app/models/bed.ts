@@ -13,16 +13,16 @@ export interface Bed {
 	tempAvg?: number;
 	bpmCurrent?: number;
 	bpmAvg?: number;
-	bpDiastolicAvg: number,
-	bpDiastolicCurrent: number,
-	bpSystolicAvg: number,
-	bpSystolicCurrent: number,
-	systolicBPMaxima: number,
-	diastolicBPMaxima: number,
-	heartRateMaxima: number,
-	heartRateMinima: number,
-	heartRateCurrent: number,
-	heartRateAvg: number,
+	bpDiastolicAvg?: number,
+	bpDiastolicCurrent?: number,
+	bpSystolicAvg?: number,
+	bpSystolicCurrent?: number,
+	systolicBPMaxima?: number,
+	diastolicBPMaxima?: number,
+	heartRateMaxima?: number,
+	heartRateMinima?: number,
+	heartRateCurrent?: number,
+	heartRateAvg?: number,
 	spO2Current?: number;
 	spO2Avg?: number;
 	spO2Minima?: number;
