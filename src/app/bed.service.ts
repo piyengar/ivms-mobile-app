@@ -24,32 +24,32 @@ export class BedService {
 	}
 
 	getBeds(): Observable<Bed[]> {
-		return this.http.get<Bed[]>(`${this.apiUrl}/all`);
+		return this.http.get<Bed[]>(`${this.apiUrl}`);
 	}
 
 	getBedMedicalData(bedId: number): Observable<Bed> {
-		let bed: Bed = {
-			id: 234234,
-			name: "John Doe",
-			age: 40,
-			sex: "Male",
-			floor_number: "1",
-			bed_no: "12341234",
-			ip_address: "10.0.0.23",
-			ward_no: "12",
-			bed_id: `${bedId}`,
-			time: "12:30 PM",
-			tempCurrent: 39.7,
-			tempAvg: 39.1,
-			bpmCurrent: 15,
-			bpmAvg: 15,
-			bpCurrent: 15,
-			bpAvg: 15,
-			spO2Current: 15,
-			spO2Avg: 15,
-		};
-		return of(bed);
-		// return this.http.get<Bed>(`${this.apiUrl}/${bedId}/medicData`);
+		// let bed: Bed = {
+		// 	id: 234234,
+		// 	name: "John Doe",
+		// 	age: 40,
+		// 	sex: "Male",
+		// 	floor_number: "1",
+		// 	bed_no: "12341234",
+		// 	ip_address: "10.0.0.23",
+		// 	ward_no: "12",
+		// 	bed_id: `${bedId}`,
+		// 	time: "12:30 PM",
+		// 	tempCurrent: 39.7,
+		// 	tempAvg: 39.1,
+		// 	bpmCurrent: 15,
+		// 	bpmAvg: 15,
+		// 	bpCurrent: 15,
+		// 	bpAvg: 15,
+		// 	spO2Current: 15,
+		// 	spO2Avg: 15,
+		// };
+		// return of(bed);
+		return this.http.get<Bed>(`${this.apiUrl}/${bedId}`);
 	}
 
 	getRealtimeData(bedId: number): Observable<MedicDataRealtime> {

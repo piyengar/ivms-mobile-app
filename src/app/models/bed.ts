@@ -3,19 +3,28 @@ export interface Bed {
 	name?: string;
 	age?: number;
 	sex?: string;
-	floor_number?: string;
-	bed_no?: string;
-	ip_address?: string;
-	ward_no?: string;
-	bed_id?: string;
+	floorNumber?: string;
+	bedNo?: string;
+	ipAddress?: string;
+	wardNo?: string;
+	bedId?: string;
 	time?: string;
 	tempCurrent?: number;
 	tempAvg?: number;
 	bpmCurrent?: number;
 	bpmAvg?: number;
-	bpCurrent?: number;
-	bpAvg?: number;
+	bpDiastolicAvg: number,
+	bpDiastolicCurrent: number,
+	bpSystolicAvg: number,
+	bpSystolicCurrent: number,
+	systolicBPMaxima: number,
+	diastolicBPMaxima: number,
+	heartRateMaxima: number,
+	heartRateMinima: number,
+	heartRateCurrent: number,
+	heartRateAvg: number,
 	spO2Current?: number;
 	spO2Avg?: number;
+	spO2Minima?: number;
 	status?: number;
 }

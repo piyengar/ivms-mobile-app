@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BedService } from '../bed.service';
 import { Bed } from '../models/bed';
-import { timer, Subscription, of } from 'rxjs';
+import { timer, Subscription, of, Subject } from 'rxjs';
 import { switchMap, map, tap, catchError } from 'rxjs/operators';
 
 
@@ -12,43 +12,60 @@ import { switchMap, map, tap, catchError } from 'rxjs/operators';
 })
 export class BedsPage implements OnInit, OnDestroy {
 
-	beds: Bed[];
 	private readonly POLL_MS = 5000;
 	private bedPoller: Subscription;
+	private bedsSubject$: Subject<Bed[]> = new Subject();
+	
+	beds: Bed[];
+	wardNo: string;
+	floorNo: string;
 
 	constructor(
 		private bedService: BedService
-	) { }
-
-	ngOnInit(): void {
-		
-	}
-
-	ngOnDestroy(): void {
-		
-	}
-	
-	ionViewDidLeave(): void {
-		console.log("destroying beds");
-		this.bedPoller && this.bedPoller.unsubscribe();
-	}
-
-	ionViewDidEnter() {
-		console.log("starting beds poll");
-		this.bedPoller = timer(0, this.POLL_MS)
-		.pipe(
-			switchMap(() => this.bedService.getBeds()),
+	) { 
+		this.bedsSubject$.pipe(
+			switchMap(() => {
+				return this.bedService.getBeds()
+					.pipe(
+						catchError(err => {
+							console.log(err);
+							return of([]);
+						})
+					)
+			}),
 			tap(beds => {
 				beds.forEach(bed => {
 					bed.status = Math.floor(Math.random() * 3);
 				})
 				this.beds = beds;
 			}),
-			catchError(err => {
-				console.log(err);
-				return of(null);
-			})
-		)
-		.subscribe();
+		).subscribe();
+	}
+
+	ngOnInit(): void {
+
+	}
+
+	ngOnDestroy(): void {
+		console.log("destroying beds");
+		this.bedsSubject$.unsubscribe();
+	}
+
+	ionViewDidLeave(): void {
+		console.log("leaving beds");
+		this.bedPoller && this.bedPoller.unsubscribe();
+		
+	}
+
+	ionViewDidEnter() {
+		console.log("starting beds poll");
+		this.bedsSubject$.subscribe();
+		this.bedPoller = timer(0, this.POLL_MS)
+			.pipe(
+				tap(_ => {
+					this.bedsSubject$.next()
+				})
+			)
+			.subscribe();
 	}
 }
