@@ -1,0 +1,80 @@
+<ion-header translucent>
+	<ion-toolbar>
+		<ion-title>Edit Threshold</ion-title>
+		<ion-buttons slot="end">
+			<ion-button (click)="dismissModal()" color="link">Close</ion-button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+	<form (ngSubmit)="update(editForm)" #editForm>
+		<ion-list>
+			<ion-item>
+				<ion-label>
+					Patient ID
+				</ion-label>
+				<ion-input slot="end" inputmode="numeric" type="text" [(ngModel)]="patientData.pID" name="pID">
+				</ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label>
+					Patient Name
+				</ion-label>
+				<ion-input slot="end" inputmode="numeric" type="text" [(ngModel)]="patientData.pName" name="pName">
+				</ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label>
+					Age
+				</ion-label>
+				<ion-input slot="end" inputmode="numeric" type="number" [(ngModel)]="patientData.pAge" name="pAge">
+				</ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label>
+					Gender
+				</ion-label>
+				<ion-input slot="end" inputmode="numeric" type="text" [(ngModel)]="patientData.pGender" name="pGender">
+				</ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label>
+					Heart Rate Minimum
+				</ion-label>
+				<ion-input slot="end" inputmode="numeric" type="number" [(ngModel)]="patientData.pMinHR" name="pMinHR">
+				</ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label>
+					Heart Rate Maximum
+				</ion-label>
+				<ion-input slot="end" inputmode="numeric" type="number" [(ngModel)]="patientData.pMaxHR" name="pMaxHR">
+				</ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label>
+					spO2 Minimum
+				</ion-label>
+				<ion-input slot="end" inputmode="numeric" type="number" [(ngModel)]="patientData.pMinspO2"
+					name="pMinspO2"></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label>
+					Systolic BP Minimum
+				</ion-label>
+				<ion-input slot="end" inputmode="numeric" type="number" [(ngModel)]="patientData.pMaxDiaBP"
+					name="pMaxDiaBP"></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label>
+					Systolic BP Maximum
+				</ion-label>
+				<ion-input slot="end" inputmode="numeric" type="number" [(ngModel)]="patientData.pMaxSysBP"
+					name="pMaxSysBP"></ion-input>
+			</ion-item>
+			<ion-button expand="block" type="submit" button color="primary" [disabled]="submitting">
+				Submit
+			</ion-button>
+		</ion-list>
+	</form>
+</ion-content>

@@ -4,14 +4,19 @@
 		<ion-buttons slot="start">
 			<ion-back-button defaultHref="/beds"></ion-back-button>
 		</ion-buttons>
+		<ion-buttons slot="end">
+			<ion-button class="ion-float-right" size="small" (click)="showEditThresholdModal()">Edit</ion-button>
+		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
 
 <ion-content>
 	<ion-card *ngIf="bed">
 		<ion-card-header>
-			<ion-card-subtitle>{{bed.name}}</ion-card-subtitle>
-			<ion-card-title>{{bed.age}} Yrs, {{bed.sex}}</ion-card-title>
+			<ion-card-title>
+				{{bed.name}} <small>{{bed.age}} Yrs, {{bed.sex}}</small>
+				<small class="ion-float-right">Bed No: {{bed.bedNo}}</small>
+			</ion-card-title>
 		</ion-card-header>
 		<ion-card-content>
 			<ion-grid>
@@ -28,34 +33,43 @@
 						<small>{{bed.bpSystolicAvg}}/{{bed.bpDiastolicAvg}} (Avg)</small>
 					</ion-col>
 					<ion-col>
-						{{bed.systolicBPMaxima}}/{{bed.diastolicBPMaxima}}
+						{{bed.systolicBPMinima}} - {{bed.systolicBPMaxima}}(Systolic)
 					</ion-col>
 				</ion-row>
 				<ion-row>
 					<ion-col class="table-header">Pulse</ion-col>
-					<ion-col>{{bed.bpmCurrent}}</ion-col>
-					<ion-col>{{bed.bpmCurrent}}</ion-col>
-				</ion-row>
-				<ion-row>
-					<ion-col class="table-header">RR</ion-col>
 					<ion-col>
-						{{bed.heartRateCurrent || 'NA'}}
+						{{bed.heartRateCurrent}}
 						<br>
 						<small>{{bed.heartRateAvg  || 'NA'}} (Avg)</small>
 					</ion-col>
 					<ion-col>{{bed.heartRateMinima}} - {{bed.heartRateMaxima}}</ion-col>
 				</ion-row>
 				<ion-row>
+					<ion-col class="table-header">RR</ion-col>
+					<ion-col>
+						{{bed.rrCurrent || 'NA'}}
+						<br>
+						<small>{{bed.rrAvg  || 'NA'}} (Avg)</small>
+					</ion-col>
+					<ion-col></ion-col>
+				</ion-row>
+				<ion-row>
 					<ion-col class="table-header">QT</ion-col>
-					<ion-col>{{bed.tempCurrent}}</ion-col>
-					<ion-col>{{bed.tempAvg}}</ion-col>
+					<ion-col>
+						{{bed.qtCurrent || 'NA'}}
+						<br>
+						<small>{{bed.qtAvg  || 'NA'}} (Avg)</small>
+					</ion-col>
+					<ion-col></ion-col>
 				</ion-row>
 			</ion-grid>
 		</ion-card-content>
 	</ion-card>
 	<ion-card>
 		<ion-card-header>
-			<ion-card-title>SpO2 (&gt; {{bed?.spO2Minima}})<span class="ion-float-end">{{bed?.spO2Current}} (Avg: {{bed?.spO2Avg}})</span></ion-card-title>
+			<ion-card-title>SpO2 (&gt; {{bed?.spO2Minima}})<span class="ion-float-end">{{bed?.spO2Current}} (Avg:
+					{{bed?.spO2Avg}})</span></ion-card-title>
 		</ion-card-header>
 		<ion-card-content>
 			<canvas #spo2Canvas></canvas>

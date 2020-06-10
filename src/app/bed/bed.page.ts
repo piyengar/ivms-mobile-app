@@ -1,10 +1,13 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, tap, switchMap } from 'rxjs/operators';
-import { Bed } from '../models/bed';
-import { Observable, Subscription, timer } from 'rxjs';
+import { ModalController } from '@ionic/angular';
+import { Chart, ChartConfiguration } from 'chart.js';
+import { Subscription, timer } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { BedService } from '../bed.service';
-import { Chart, ChartOptions, ChartConfiguration, ChartColor, ChartData, ChartPoint } from 'chart.js';
+import { Bed } from '../models/bed';
+import { EditThresholdComponent } from './edit-threshold/edit-threshold.component';
+import { PatientData } from '../models/patient-data';
 
 @Component({
 	selector: 'app-bed',
@@ -36,8 +39,8 @@ export class BedPage implements OnInit {
 
 	constructor(
 		private route: ActivatedRoute,
-		private bedService: BedService
-
+		private bedService: BedService,
+		private modalController: ModalController
 	) { }
 
 	ngOnInit() {
@@ -67,7 +70,7 @@ export class BedPage implements OnInit {
 		this.bedRealtimeDataSub = this.bedService.getRealtimeData(this.bedId)
 			.pipe(
 				tap(data => {
-					console.log('new data', data.ppg);
+					// console.log('new data', data.ppg);
 					this.addSpO2Data(data.ppg);
 				})
 			)
@@ -86,6 +89,30 @@ export class BedPage implements OnInit {
 			duration: 0,
 			lazy: true
 		});
+	}
+
+	async showEditThresholdModal() {
+		let patientData: PatientData = {
+			pID: this.bed.id,
+			pName: this.bed.name,
+			pAge: this.bed.age,
+			pGender: this.bed.sex,
+			pMaxDiaBP: this.bed.diastolicBPMaxima,
+			pMaxSysBP: this.bed.systolicBPMaxima,
+			pMaxHR: this.bed.heartRateMaxima,
+			pMinHR: this.bed.heartRateMinima,
+			pMinspO2: this.bed.spO2Minima
+		};
+		const modal = await this.modalController.create({
+			component: EditThresholdComponent,
+			componentProps: {
+				patientData: patientData,
+				bed: this.bed
+			},
+			cssClass: 'edit-pt-modal'
+		});
+		await modal.present();
+		await modal.onDidDismiss();
 	}
 
 	private stopBedDataPoller() {
@@ -135,7 +162,7 @@ export class BedPage implements OnInit {
 							suggestedMin: 0,
 							stepSize: 20
 						},
-						gridLines : {
+						gridLines: {
 							tickMarkLength: 3
 						}
 					}]

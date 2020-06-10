@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, timer } from 'rxjs';
+import { Observable, of, timer, pipe } from 'rxjs';
 import { webSocket } from "rxjs/webSocket";
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -7,6 +7,7 @@ import { Bed } from './models/bed';
 import { MedicData } from './models/medic-data';
 import { MedicDataRealtime } from './models/medic-data-realtime';
 import { map } from 'rxjs/operators';
+import { PatientData } from './models/patient-data';
 
 @Injectable({
 	providedIn: 'root'
@@ -75,9 +76,17 @@ export class BedService {
 			url: url,
 		}).pipe(
 			map(data => {
-				console.log('ws recd data', data);
+				// console.log('ws recd data', data);
 				return data;
 			})
+		);
+	}
+
+	updatePatientData(bed: Bed, data: PatientData): Observable<void> {
+		let url = `http"//${bed.ipAddress}`;
+		return this.http.post(url, data)
+		.pipe(
+			map(ret => null)
 		);
 	}
 }

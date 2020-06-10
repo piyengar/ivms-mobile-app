@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { BedPageRoutingModule } from './bed-routing.module';
 
 import { BedPage } from './bed.page';
+import { EditThresholdComponent } from './edit-threshold/edit-threshold.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,9 @@ import { BedPage } from './bed.page';
     IonicModule,
     BedPageRoutingModule
   ],
-  declarations: [BedPage]
+  declarations: [
+	  BedPage,
+	  EditThresholdComponent
+	]
 })
 export class BedPageModule {}

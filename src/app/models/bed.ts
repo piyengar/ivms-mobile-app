@@ -1,5 +1,6 @@
+type StatusCode = 0 | 1 | 2;
 export interface Bed {
-	id?: number;
+	id?: string;
 	name?: string;
 	age?: number;
 	sex?: string;
@@ -9,22 +10,32 @@ export interface Bed {
 	wardNo?: string;
 	bedId?: string;
 	time?: string;
-	tempCurrent?: number;
-	tempAvg?: number;
-	bpmCurrent?: number;
-	bpmAvg?: number;
-	bpDiastolicAvg?: number,
-	bpDiastolicCurrent?: number,
-	bpSystolicAvg?: number,
-	bpSystolicCurrent?: number,
-	systolicBPMaxima?: number,
-	diastolicBPMaxima?: number,
-	heartRateMaxima?: number,
-	heartRateMinima?: number,
-	heartRateCurrent?: number,
-	heartRateAvg?: number,
+
+	// bpmCurrent?: number;
+	// bpmAvg?: number;
+
+	bpDiastolicAvg?: number;
+	bpDiastolicCurrent?: number;
+	
+	bpSystolicAvg?: number;
+	bpSystolicCurrent?: number;
+	systolicBPMinima?: number;
+	systolicBPMaxima?: number;
+
+	heartRateMaxima?: number;
+	heartRateMinima?: number;
+	heartRateCurrent?: number;
+	heartRateAvg?: number;
+
 	spO2Current?: number;
 	spO2Avg?: number;
 	spO2Minima?: number;
-	status?: number;
+
+	rrCurrent?: number;
+	rrAvg?: number;
+
+	qtCurrent?: number;
+	qtAvg?: number;
+
+	status?: StatusCode;
 }
