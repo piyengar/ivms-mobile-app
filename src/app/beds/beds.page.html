@@ -1,19 +1,21 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Beds</ion-title>
-  </ion-toolbar>
+	<ion-toolbar>
+		<ion-title>Beds</ion-title>
+	</ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col *ngFor="let bed of beds" [routerLink]="['/beds', bed.id]" style="padding: 2px;" size="3" size-md="2">
-        <div class="bed-tile" [ngClass]="{'bed-ok' : bed.status == 0, 'bed-warning' : bed.status == 1, 'bed-danger' : bed.status == 2}">
-			<div class="bed-tile-content">
-				<span class="bed-tile-number">{{bed.id}}</span>
-			</div>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+	<ion-grid>
+		<ion-row>
+			<ion-col *ngFor="let bed of beds" [routerLink]="['/beds', bed.bedId]" style="padding: 2px;" size="3"
+				size-md="2">
+				<div class="bed-tile"
+					[ngClass]="{'bed-ok' : bed.status == 0, 'bed-warning' : bed.status == 1, 'bed-danger' : bed.status == 2, 'bed-nopatient' : !bed.patientId}">
+					<div class="bed-tile-content">
+						<span class="bed-tile-number">{{bed.bedNo}}</span>
+					</div>
+				</div>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
 </ion-content>

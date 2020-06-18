@@ -1,5 +1,5 @@
 export interface PatientData {
-	pID?: number;
+	pID?: string;
 	pName?: string;
 	pAge?: number;
 	pGender?: string;
@@ -7,5 +7,7 @@ export interface PatientData {
 	pMaxHR?: number;
 	pMinspO2?: number;
 	pMaxSysBP?: number;
-	pMaxDiaBP?: number;
+	pMinSysBP?: number;
+	pBedNo?: string;
+	pWardNo?: string;
 }

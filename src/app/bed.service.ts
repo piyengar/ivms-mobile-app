@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Bed } from './models/bed';
 import { MedicData } from './models/medic-data';
 import { MedicDataRealtime } from './models/medic-data-realtime';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { PatientData } from './models/patient-data';
 
 @Injectable({
@@ -24,54 +24,77 @@ export class BedService {
 		this.apiUrl = `${environment.serverUrl}${this.API_SUB_PATH}`;
 	}
 
+	private cleanupBedData(bed: Bed) {
+		bed.rrCurrent = 14;
+		bed.rrAvg = 14;
+		bed.qtCurrent = 390;
+		bed.qtAvg = 387;
+		bed.systolicBPMinima = bed.diastolicBPMaxima;
+		this.updateNaNs(bed);
+		this.updateStatus(bed);
+	}
+
+	private updateNaNs(bed: any) {
+		bed.spO2Current = bed.spO2Current || 0;
+		bed.bpSystolicCurrent = bed.bpSystolicCurrent || 0;
+		bed.bpDiastolicCurrent = bed.bpDiastolicCurrent || 0;
+		bed.heartRateCurrent = bed.heartRateCurrent || 0;
+		bed.heartRateMaxima = bed.heartRateMaxima || 140;
+		bed.heartRateMinima = bed.heartRateMinima || 60;
+		bed.systolicBPMinima = bed.systolicBPMinima || 90;
+		bed.systolicBPMaxima = bed.systolicBPMaxima || 140;
+		bed.spO2Minima = bed.spO2Minima || 92;
+	}
+
+	private updateStatus(bed: Bed): void {
+		const warningFactor = -0.05;
+		let params = [0];
+		params.push((bed.spO2Current - bed.spO2Minima) / bed.spO2Minima);
+		params.push((bed.systolicBPMaxima - bed.bpSystolicCurrent) / bed.systolicBPMaxima);
+		params.push((bed.bpSystolicCurrent - bed.systolicBPMinima) / bed.systolicBPMinima);
+		params.push((bed.heartRateMaxima - bed.bpmCurrent) / bed.heartRateMaxima);
+		params.push((bed.bpmCurrent - bed.heartRateMinima) / bed.heartRateMinima);
+		let min = Math.min(...params);
+		if (min < 0) {
+			if (min < warningFactor) {
+				bed.status = 2;
+				return;
+			}
+			bed.status = 1;
+			return;
+		}
+		bed.status = 0;
+		return;
+	}
+
 	getBeds(): Observable<Bed[]> {
-		return this.http.get<Bed[]>(`${this.apiUrl}`);
+		return this.http.get<Bed[]>(`${this.apiUrl}`)
+			.pipe(
+				map(beds => {
+					if (beds && beds.length) {
+						beds.forEach((bed: Bed) => {
+							this.cleanupBedData(bed);
+						});
+					}
+					return beds;
+				}),
+			);
 	}
 
 	getBedMedicalData(bedId: number): Observable<Bed> {
-		// let bed: Bed = {
-		// 	id: 234234,
-		// 	name: "John Doe",
-		// 	age: 40,
-		// 	sex: "Male",
-		// 	floor_number: "1",
-		// 	bed_no: "12341234",
-		// 	ip_address: "10.0.0.23",
-		// 	ward_no: "12",
-		// 	bed_id: `${bedId}`,
-		// 	time: "12:30 PM",
-		// 	tempCurrent: 39.7,
-		// 	tempAvg: 39.1,
-		// 	bpmCurrent: 15,
-		// 	bpmAvg: 15,
-		// 	bpCurrent: 15,
-		// 	bpAvg: 15,
-		// 	spO2Current: 15,
-		// 	spO2Avg: 15,
-		// };
-		// return of(bed);
-		return this.http.get<Bed>(`${this.apiUrl}/${bedId}`);
+		return this.http.get<Bed>(`${this.apiUrl}/${bedId}`)
+			.pipe(
+				map(bed => {
+					if (bed) {
+						this.cleanupBedData(bed);
+					}
+					return bed;
+				}),
+			);;
 	}
 
 	getRealtimeData(bedId: number): Observable<MedicDataRealtime> {
 		let url = `${this.apiUrl}/${bedId}/realtime`.replace(/^http/, 'ws');
-		// let oldSpo2 = 90;
-		// const delta = 2;
-		// return timer(0, 500)
-		// .pipe(
-		// 	map(n => {
-		// 		let data: MedicDataRealtime = {
-		// 			spo2: []
-		// 		}
-		// 		for (let i = 0; i < 10; i++) {
-		// 			let hi = Math.min(oldSpo2 + delta, 100);
-		// 			let lo = Math.max(oldSpo2 - delta, 0);
-		// 			oldSpo2 = +(lo + (hi - lo) * Math.random()).toFixed(2);
-		// 			data.spo2[i] = oldSpo2;
-		// 		}
-		// 		return data;
-		// 	})
-		// );
 		return webSocket<MedicDataRealtime>({
 			url: url,
 		}).pipe(
@@ -82,11 +105,11 @@ export class BedService {
 		);
 	}
 
-	updatePatientData(bed: Bed, data: PatientData): Observable<void> {
-		let url = `http"//${bed.ipAddress}`;
+	updatePatientData(bed: Bed, data: FormData): Observable<void> {
+		let url = `http://${bed.ipAddress}`;
 		return this.http.post(url, data)
-		.pipe(
-			map(ret => null)
-		);
+			.pipe(
+				map(ret => null)
+			);
 	}
 }

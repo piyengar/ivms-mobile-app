@@ -3,6 +3,7 @@
 	position: relative;
 	height: 0;
 	overflow: hidden;
+	border: 5px transparent solid;
 	.bed-tile-content {
 		position: absolute;
 		top: 0px;
@@ -18,9 +19,13 @@
 	}
 	&.bed-warning {
 		background-color: yellow;
+		color: var(--ion-color-light);
 	}
 	&.bed-danger {
 		background-color: red;
+	}
+	&.bed-nopatient {
+		border: 5px white solid;
 	}
 	.bed-tile-number {
 		font-size: 2em;

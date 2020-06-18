@@ -26,19 +26,13 @@ export class BedsPage implements OnInit, OnDestroy {
 			switchMap(() => {
 				return this.bedService.getBeds()
 					.pipe(
+						tap((beds: Bed[]) => this.beds = beds),
 						catchError(err => {
 							console.log(err);
 							return of([]);
 						})
 					)
-			}),
-			tap(beds => {
-				beds.forEach(bed => {
-					this.updateNaNs(bed);
-					this.updateStatus(bed);
-				})
-				this.beds = beds;
-			}),
+			})
 		).subscribe();
 	}
 
@@ -66,32 +60,4 @@ export class BedsPage implements OnInit, OnDestroy {
 			)
 			.subscribe();
 	}
-
-	private updateStatus(bed: Bed): void {
-		const warningFactor = 0.05;
-		let dSP = (bed.spO2Current - bed.spO2Minima) / bed.spO2Minima;
-		let dBPSys = (bed.systolicBPMaxima - bed.bpSystolicCurrent) / bed.systolicBPMaxima;
-		let dBPDia = (bed.bpDiastolicCurrent - bed.diastolicBPMaxima) / bed.diastolicBPMaxima;
-		let dHRMax = (bed.heartRateMaxima - bed.heartRateCurrent) / bed.heartRateMaxima;
-		let dHRMin = (bed.heartRateCurrent - bed.heartRateMinima) / bed.heartRateMinima;
-		let min = Math.min(dSP, dBPSys, dBPDia, dHRMax, dHRMin);
-		if (min < warningFactor) {
-			if (min < 0) {
-				bed.status = 2;
-				return;
-			}
-			bed.status = 1;
-			return;
-		}
-		bed.status = 0;
-		return;
-	}
-
-	updateNaNs(bed: any) {
-		bed.spO2Current = bed.spO2Current || 0;
-		bed.bpSystolicCurrent = bed.bpSystolicCurrent || 0;
-		bed.bpDiastolicCurrent = bed.bpDiastolicCurrent || 0;
-		bed.heartRateCurrent = bed.heartRateCurrent || 0;
-	}
-
 }

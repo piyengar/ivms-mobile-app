@@ -64,7 +64,14 @@ export class BedPage implements OnInit {
 		this.bedDataPoller = timer(0, this.POLL_MS)
 			.pipe(
 				switchMap(() => this.bedService.getBedMedicalData(this.bedId)),
-				tap(bed => this.bed = bed)
+				tap(bed => {
+					bed.systolicBPMinima = bed.diastolicBPMaxima;
+					bed.rrCurrent = 14;
+					bed.rrAvg = 14;
+					bed.qtCurrent = 390;
+					bed.qtAvg = 387;
+					this.bed = bed;
+				})
 			)
 			.subscribe();
 		this.bedRealtimeDataSub = this.bedService.getRealtimeData(this.bedId)
@@ -75,6 +82,25 @@ export class BedPage implements OnInit {
 				})
 			)
 			.subscribe();
+	}
+
+	getBlinkClass(val: number, lb: number, ub: number) {
+		let status = 0;
+		if(val){
+			const warningFactor = -0.05;
+			let params = [0];
+			if(lb){
+				params.push((val - lb) / lb)
+			}
+			if(ub)
+				params.push((ub - val) / ub);
+			let dt = Math.min(...params);
+			if (dt < 0) status = 1;
+			if (dt < warningFactor) status = 2;
+		}
+		if(status == 1) return 'blink';
+		if(status == 2) return 'blink-fast';
+		return '';
 	}
 
 	addSpO2Data(newData: number[] = []) {
@@ -93,15 +119,17 @@ export class BedPage implements OnInit {
 
 	async showEditThresholdModal() {
 		let patientData: PatientData = {
-			pID: this.bed.id,
+			pID: this.bed.patientId,
 			pName: this.bed.name,
 			pAge: this.bed.age,
 			pGender: this.bed.sex,
-			pMaxDiaBP: this.bed.diastolicBPMaxima,
+			pMinSysBP: this.bed.systolicBPMinima,
 			pMaxSysBP: this.bed.systolicBPMaxima,
 			pMaxHR: this.bed.heartRateMaxima,
 			pMinHR: this.bed.heartRateMinima,
-			pMinspO2: this.bed.spO2Minima
+			pMinspO2: this.bed.spO2Minima,
+			pBedNo: this.bed.bedNo,
+			pWardNo: this.bed.wardNo,
 		};
 		const modal = await this.modalController.create({
 			component: EditThresholdComponent,

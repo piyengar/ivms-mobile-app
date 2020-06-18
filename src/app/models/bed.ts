@@ -1,6 +1,6 @@
 type StatusCode = 0 | 1 | 2;
 export interface Bed {
-	id?: string;
+	patientId?: string;
 	name?: string;
 	age?: number;
 	sex?: string;
@@ -11,8 +11,8 @@ export interface Bed {
 	bedId?: string;
 	time?: string;
 
-	// bpmCurrent?: number;
-	// bpmAvg?: number;
+	bpmCurrent?: number;
+	bpmAvg?: number;
 
 	bpDiastolicAvg?: number;
 	bpDiastolicCurrent?: number;
@@ -21,11 +21,14 @@ export interface Bed {
 	bpSystolicCurrent?: number;
 	systolicBPMinima?: number;
 	systolicBPMaxima?: number;
+	
+	// TODO need to remove this
+	diastolicBPMaxima?: number;
 
 	heartRateMaxima?: number;
 	heartRateMinima?: number;
-	heartRateCurrent?: number;
-	heartRateAvg?: number;
+	// heartRateCurrent?: number;
+	// heartRateAvg?: number;
 
 	spO2Current?: number;
 	spO2Avg?: number;

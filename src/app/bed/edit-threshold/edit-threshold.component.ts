@@ -31,7 +31,11 @@ export class EditThresholdComponent implements OnInit {
 
 	update(form){
 		this.submitting = true;
-		this.bedService.updatePatientData(this.bed, this.patientData)
+		let data: FormData = new FormData();
+		for(let k in this.patientData){
+			data.append(k, this.patientData[k]);
+		}
+		this.bedService.updatePatientData(this.bed, data)
 		.pipe(
 			tap(_ => {
 				this.modalController.dismiss();

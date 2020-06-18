@@ -1,4 +1,46 @@
-.table-header {
-	font-size: 1.2em;
-	font-weight: bold;
+.bed-data-grid {
+	.table-header {
+		font-size: 1.2em;
+		font-weight: bold;
+	}
+
+	ion-row {
+		.param-label {
+			font-size: 2em;
+			font-weight: bold;
+		}
+
+		.param-measured {
+			font-size: xx-large;
+			div {
+				padding: 2px;
+				line-height: 1;
+			}
+			small {
+				font-size: small;
+			}
+		}
+		border-bottom: 1px solid white;
+	}
+}
+
+@keyframes blink {
+	50% {
+		opacity: 0;
+	}
+}
+@-webkit-keyframes blink {
+	50% {
+		opacity: 0;
+	}
+}
+.blink {
+	@mixin blink($rate) {
+		animation: blink $rate step-start 0s infinite;
+		-webkit-animation: blink $rate step-start 0s infinite;
+	}
+	@include blink(1s);
+	&-fast {
+		@include blink(0.5s);
+	}
 }
