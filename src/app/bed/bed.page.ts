@@ -2,8 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Chart, ChartConfiguration } from 'chart.js';
-import { Subscription, timer } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { Subscription, timer, of } from 'rxjs';
+import { switchMap, tap, catchError, retry } from 'rxjs/operators';
 import { BedService } from '../bed.service';
 import { Bed } from '../models/bed';
 import { EditThresholdComponent } from './edit-threshold/edit-threshold.component';
@@ -63,43 +63,59 @@ export class BedPage implements OnInit {
 	private startBedDataPoller() {
 		this.bedDataPoller = timer(0, this.POLL_MS)
 			.pipe(
-				switchMap(() => this.bedService.getBedMedicalData(this.bedId)),
+				switchMap(() => {
+					return this.bedService.getBedMedicalData(this.bedId)
+						.pipe(
+							catchError(err => {
+								// console.log(err);
+								return of(null);
+							}),
+						)
+				}),
 				tap(bed => {
-					bed.systolicBPMinima = bed.diastolicBPMaxima;
-					bed.rrCurrent = 14;
-					bed.rrAvg = 14;
-					bed.qtCurrent = 390;
-					bed.qtAvg = 387;
-					this.bed = bed;
-				})
+					if (bed) {
+						bed.systolicBPMinima = bed.diastolicBPMaxima;
+						bed.rrCurrent = 14;
+						bed.rrAvg = 14;
+						bed.qtCurrent = 390;
+						bed.qtAvg = 387;
+						this.bed = bed;
+					}
+				}),
 			)
 			.subscribe();
-		this.bedRealtimeDataSub = this.bedService.getRealtimeData(this.bedId)
+		this.bedRealtimeDataSub = of(null)
 			.pipe(
+				switchMap(_ => this.bedService.getRealtimeData(this.bedId)),
 				tap(data => {
 					// console.log('new data', data.ppg);
 					this.addSpO2Data(data.ppg);
-				})
+				}),
+				retry(),
+				catchError(err => {
+					console.log(err);
+					return of(null);
+				}),
 			)
 			.subscribe();
 	}
 
 	getBlinkClass(val: number, lb: number, ub: number) {
 		let status = 0;
-		if(val){
+		if (val) {
 			const warningFactor = -0.05;
 			let params = [0];
-			if(lb){
+			if (lb) {
 				params.push((val - lb) / lb)
 			}
-			if(ub)
+			if (ub)
 				params.push((ub - val) / ub);
 			let dt = Math.min(...params);
 			if (dt < 0) status = 1;
 			if (dt < warningFactor) status = 2;
 		}
-		if(status == 1) return 'blink';
-		if(status == 2) return 'blink-fast';
+		if (status == 1) return 'blink';
+		if (status == 2) return 'blink-fast';
 		return '';
 	}
 
