@@ -74,7 +74,6 @@ export class BedPage implements OnInit {
 				}),
 				tap(bed => {
 					if (bed) {
-						bed.systolicBPMinima = bed.diastolicBPMaxima;
 						bed.rrCurrent = 14;
 						bed.rrAvg = 14;
 						bed.qtCurrent = 390;

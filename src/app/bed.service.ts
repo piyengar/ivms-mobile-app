@@ -29,7 +29,6 @@ export class BedService {
 		bed.rrAvg = 14;
 		bed.qtCurrent = 390;
 		bed.qtAvg = 387;
-		bed.systolicBPMinima = bed.diastolicBPMaxima;
 		this.updateNaNs(bed);
 		this.updateStatus(bed);
 	}
