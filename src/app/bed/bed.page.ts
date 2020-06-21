@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Chart, ChartConfiguration } from 'chart.js';
 import { Subscription, timer, of } from 'rxjs';
+import {retryBackoff} from 'backoff-rxjs';
 import { switchMap, tap, catchError, retry } from 'rxjs/operators';
 import { BedService } from '../bed.service';
 import { Bed } from '../models/bed';
@@ -86,11 +87,19 @@ export class BedPage implements OnInit {
 		this.bedRealtimeDataSub = of(null)
 			.pipe(
 				switchMap(_ => this.bedService.getRealtimeData(this.bedId)),
+				catchError(err => {
+					console.log(err);
+					throw err;
+				}),
+				retryBackoff({
+					initialInterval: 1000,
+					maxInterval:32000,
+					resetOnSuccess: true,
+				}),
 				tap(data => {
 					// console.log('new data', data.ppg);
 					this.addSpO2Data(data.ppg);
 				}),
-				retry(),
 				catchError(err => {
 					console.log(err);
 					return of(null);
