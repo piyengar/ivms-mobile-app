@@ -98,7 +98,7 @@ export class BedPage implements OnInit {
 				}),
 				tap(data => {
 					// console.log('new data', data.ppg);
-					this.addSpO2Data(data.ppg);
+					this.addPPGData(data.ppg);
 				}),
 				catchError(err => {
 					console.log(err);
@@ -127,7 +127,7 @@ export class BedPage implements OnInit {
 		return '';
 	}
 
-	addSpO2Data(newData: number[] = []) {
+	addPPGData(newData: number[] = []) {
 		this.spo2ChartData = this.spo2ChartData.concat(newData);
 		if (this.spo2ChartData.length > this.MAX_SPO2_LEN) {
 			this.spo2ChartData.splice(0, this.spo2ChartData.length - this.MAX_SPO2_LEN);
@@ -179,7 +179,7 @@ export class BedPage implements OnInit {
 				labels: this.spo2Labels,
 				datasets: [
 					{
-						label: "SpO2(%)",
+						label: "PPG",
 						data: this.spo2ChartData,
 						showLine: true,
 						fill: false,
@@ -205,14 +205,14 @@ export class BedPage implements OnInit {
 					}],
 					yAxes: [{
 						display: true,
-						// scaleLabel: {
-						// 	display: true,
-						// 	labelString: 'Value'
-						// },
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						},
 						ticks: {
-							suggestedMax: 100,
-							suggestedMin: 0,
-							stepSize: 20
+							suggestedMax: 1024,
+							suggestedMin: -1024,
+							// stepSize: 20
 						},
 						gridLines: {
 							tickMarkLength: 3
