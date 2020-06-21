@@ -12,7 +12,9 @@
 				<div class="bed-tile"
 					[ngClass]="{'bed-ok' : bed.status == 0, 'bed-warning' : bed.status == 1, 'bed-danger' : bed.status == 2, 'bed-nopatient' : !bed.patientId}">
 					<div class="bed-tile-content">
-						<span class="bed-tile-number">{{bed.bedNo}}</span>
+						<div class="bed-tile-number">{{bed.bedNo}}</div>
+						<div class="bed-tile-name">{{bed.name}}</div>
+						<div class="bed-tile-name">{{bed.patientId}}</div>
 					</div>
 				</div>
 			</ion-col>
