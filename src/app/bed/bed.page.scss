@@ -14,14 +14,13 @@
 			font-weight: bold;
 		}
 
-		.param-measured {
+		.param-measured,
+		.param-threshold {
 			font-size: xx-large;
-			div {
-				padding: 2px;
-				line-height: 1;
-			}
-			small {
-				font-size: small;
+			padding: 2px;
+			line-height: 1;
+			.secondary {
+				font-size: 0.8em;
 			}
 		}
 		border-bottom: 1px solid white;
