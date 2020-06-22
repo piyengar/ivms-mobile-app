@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  ivm:
+    image: ivm
+    build: .
+    environment:
+      NODE_ENV: development
+    ports:
+      - 8100:8100
+    ## set your startup file here
+    command: ionic serve
